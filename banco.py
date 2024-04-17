@@ -21,7 +21,7 @@ def depositar(deposito, saldo, extrato, /):
         print("Não é possível depositar valores negativos.")
     return saldo, extrato
 
-def sacar(*, saque, limite, saldo, extrato):
+def sacar(*, saque, limite, saldo, extrato, numeroSaques):
     if saque > saldo:
         print(f"Seu saldo não permite um saque superior à R${saldo:.2f}.")
     elif saque > limite:
@@ -31,7 +31,8 @@ def sacar(*, saque, limite, saldo, extrato):
         print(f"Você realizou um saque de: R${saque:.2f}.")
         print(f"Seu saldo é de: R${saldo:.2f}")
         extrato += f" - R${saque:.2f}\n"
-    return saldo, extrato
+        numeroSaques += 1
+    return saldo, extrato, numeroSaques
 
 def extratos(saldo,/, *, extrato):
     print("-"*40)
@@ -71,7 +72,7 @@ def criar_contaCorrente(agencia, num_conta, usuarios):
 
     if user:
         print("Conta vinculada com sucesso!")
-        return {"agencia":agencia, "num_conta":num_conta, "user": user}   
+        return {"agencia":agencia, "num_conta":num_conta, "user": user}  
     print("Usuário não encontrado. Tente novamente!")
 
 def main():
@@ -103,13 +104,13 @@ def main():
                 continue
 
             if numeroSaques < LIMITES_SAQUES:
-                saldo, extrato = sacar(
+                saldo, extrato, numeroSaques = sacar(
                     saldo = saldo,
                     extrato = extrato,
-                    limite=limite,
-                    saque=saque
+                    limite = limite,
+                    saque = saque,
+                    numeroSaques = numeroSaques
                 )
-                numeroSaques += 1
             else:
                 print("Não é possível realizar mais saques hoje.")
             print("-"*40)
@@ -125,6 +126,7 @@ def main():
 
             if conta:
                 contas.append(conta)
+                num_conta += 1
 
         elif opcao == "q":
             break
